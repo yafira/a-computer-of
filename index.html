@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>a computer of ___</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap">
+<style>
+/* layout: one column, the stanza cascades down and to the right like layered cloth; controls sit under it */
+:root {
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+  --ink-soft: #6b6b6b;
+  --ink-faint: #bdbdbd;
+  --rule: #e2e2e2;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --step: 5ch;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0a0a0a; --ink: #f5f5f5; --ink-soft: #9a9a9a; --ink-faint: #4a4a4a; --rule: #262626; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0a0a0a; --ink: #f5f5f5; --ink-soft: #9a9a9a; --ink-faint: #4a4a4a; --rule: #262626; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.6;
+  padding-block: 40px 56px;
+  padding-inline: 24px;
+}
+.wrap { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+header { display: flex; flex-direction: column; gap: 8px; max-width: 62ch; }
+h1 { font-size: 15px; font-weight: 500; margin: 0; letter-spacing: 0.01em; }
+header p { margin: 0; color: var(--ink-soft); font-weight: 300; }
+
+#stage {
+  appearance: none; background: none; border: 0; color: inherit; font: inherit; text-align: left;
+  padding: 0; cursor: pointer; display: flex; flex-direction: column; gap: 36px; min-width: 0;
+}
+#stage:focus-visible { outline: 1px dashed var(--ink); outline-offset: 12px; }
+
+.stanza { display: flex; flex-direction: column; font-size: clamp(15px, 1.6vw + 8px, 20px); line-height: 1.75; }
+.stanza.old { color: var(--ink-faint); font-size: 15px; line-height: 1.6; }
+.stanza.old .tag { display: none; }
+.line { padding-left: calc(var(--i) * var(--step)); text-indent: -2ch; margin-left: 2ch; min-width: 0; overflow-wrap: anywhere; }
+.line.pending { visibility: hidden; }
+.w { font-weight: 500; }
+.stanza.old .w { font-weight: 400; }
+.struck { text-decoration: line-through; color: var(--ink-faint); font-weight: 300; }
+.tag { color: var(--ink-soft); font-weight: 300; font-style: italic; font-size: 0.72em; white-space: nowrap; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; border-top: 1px solid var(--rule); padding-top: 20px; }
+.group { display: flex; gap: 0; border: 1px solid var(--ink); }
+.group button, .toggle, .again {
+  font: inherit; font-size: 13px; color: var(--ink); background: var(--paper); border: 0; padding: 6px 12px; cursor: pointer;
+}
+.group button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.group button + button { border-left: 1px solid var(--ink); }
+.toggle { padding: 6px 0; display: inline-flex; gap: 8px; align-items: center; }
+.toggle[disabled] { color: var(--ink-faint); cursor: default; }
+.box { display: inline-block; width: 11px; height: 11px; border: 1px solid currentColor; }
+.toggle[aria-pressed="true"] .box { background: currentColor; }
+.again { border: 1px solid var(--ink); margin-left: auto; }
+.again:hover, .group button:hover { text-decoration: underline; }
+button:focus-visible { outline: 1px dashed var(--ink); outline-offset: 3px; }
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.hint { margin: 0;  color: var(--ink-soft); font-size: 13px; font-weight: 300; }
+
+footer { color: var(--ink-soft); font-size: 12px; font-weight: 300; max-width: 62ch; display: flex; flex-direction: column; gap: 6px; }
+footer p { margin: 0; }
+
+@media (max-width: 560px) {
+  :root { --step: 2ch; }
+  body { padding-inline: 16px; padding-block: 28px 40px; }
+  .again { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .line.pending { visibility: visible; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>a computer of ___</h1>
+    <p>A generator of soft computers: imaginary machines made of fabric, powered gently, built without urgency. Each stanza assembles one machine in seven steps: material, binding, power, interface, place, inhabitant, promise.</p>
+  </header>
+
+  <button id="stage" type="button" aria-label="Build another computer" aria-live="polite"></button>
+
+  <div class="panel">
+  <div class="controls">
+    <div class="group" role="group" aria-label="Vocabulary">
+      <button id="src-hand" type="button" aria-pressed="false">my words</button>
+      <button id="src-corpus" type="button" aria-pressed="true">our words</button>
+    </div>
+    <button id="t-tags" class="toggle" type="button" aria-pressed="false"><span class="box"></span>show the tagging</button>
+    <button id="t-cold" class="toggle" type="button" aria-pressed="false"><span class="box"></span>let the cold in</button>
+    <button id="again" class="again" type="button">build another</button>
+  </div>
+  <p class="hint" id="hint"></p>
+  </div>
+
+  <footer>
+    <p><b>my words</b> is the original generator: seven lists of phrases written from my own design practice. <b>our words</b> picks each slot from the nearest neighbors of a target feeling in a semantic corpus hand-tagged by the Reading and Writing Electronic Text class (Allison Parrish, NYU ITP), then refuses any word the class tagged cold, sharp, or academic. Refused words are struck through as the machine is built.</p>
+    <p>Yafira Martinez, 2026</p>
+  </footer>
+</div>
+<script>
+// nearest-neighbor pools precomputed from the class semantic corpus (semantic-categories-2026-04-10.jsonl)
+const DATA = {"pools":{"material":["threads","horse","flute-player","gas","tall","flutter","period","necessity","trace","men singers","lion","glass","chestnut","posts","joint","wood","woman","plants","people","animals","rock","gasoline","your knees","knee","leaves","hoes","normal","foil","pole","gowns","inherent","sand","insect","finger","whiskers","daughter","bodies","bough","sea","head"],"structure":["harmonious","okay","lamp","salon","something","message","again","character","mutual","loop","all","lyric","breast","whispers","ease","open","broad","close","full","show","complete","hours","stamp","ones","return","motion","public","rippling","swiftness","camera","worlds","ball","lovely","nod","pockets","papa","together","unusually good","rich","shaft"],"power":["simmering","yellow","temperate","sunset","red","bath","praise","lift","hot","middle","notions","fire","nightingale","light","heat","vineyards","summer","afternoon","glow","asleep","honest","sunlight","share","manner","clothes","honey","tea","aura","bosom","touch","parent","heaven","liquor","color","father","pet","morning","desire","music","october"],"interface":["hunger","fit","steps","speakers","vehicle","stitch","straight","plow","trucks","neat","pen","workmen","thing","dock","gunpowder","doorways","typewriters","drinking","spine","pace","pieces","real","step","cuff","roads","locksmiths","long","piece","stocking","trip","topmost","proficient","rooms","sugar","platform","heights","side","set","captain","dessert"],"interface_soft":["tips","stocking","trip","topmost","proficient","sugar","traces","bearer","tangible","set","temples","teaspoon","shelf","rooms","platform","captain","ground","the pilot","writers","turnpikes","physical","figure","instruments","store","dessert","bottle","side","asia","heights","furniture","room","objects","couch","dock","workmen","gunpowder","supermarket","thing","doorways","suitcase"],"location":["harmonious","okay","whispers","breast","ease","lamp","kiln","salon","coats","shaft","fond","rich","together","everyone","unusually good","songs","house","lovely","pockets","nod","papa","workmanship","foulness","open","aura","lights","the sun","tucked in","close","bosom","full","unity","broad","hot","sun","pan","village","hearts","belly","october"],"inhabitant":["husband","personal","melancholies","concerns","you","support","behavior","uncertain","front","conceit","romance","salutation","jealous","degrading","wanting","lonely","daily","amazing","chuckle","temper","dad","ashamed","dread","passion","wives","sure","disappointment","bored","sorrow","confused","humble","problems","boreddddd","frail words","language","faithful","interest","ordinary","awful","plays"],"promise":["fame","near","foolish","jolly","girlish","strong","charming","functionless","imagination","slang","ok","performances","vibe","mean","_statirical_","personality","pride","desires","beautiful","excitement","flavorful","sentimental","unfair","soul","enchanted","funny","merry","true loves","careless","comic","shame","influences","mad","imagery","forgivable","trick","beauty","plays","wives","disappointment"]},"tags":{"_statirical_":[["emotive",1],["youthful",1]],"afternoon":[["warm",4],["organic",2],["tangible",2],["round",1],["emotive",1]],"again":[["round",2]],"all":[["round",3]],"amazing":[["emotive",1]],"animals":[["organic",5],["tangible",5],["warm",2],["youthful",1]],"ashamed":[["emotive",2]],"asia":[["tangible",1]],"asleep":[["warm",4],["emotive",2],["youthful",1],["organic",1],["round",1]],"aura":[["warm",2],["organic",1],["emotive",1],["round",1]],"awful":[["emotive",1]],"ball":[["round",3],["tangible",2],["outlandish",1],["warm",1],["youthful",1]],"bath":[["warm",3],["organic",1],["tangible",1]],"bearer":[["tangible",1]],"beautiful":[["emotive",3],["youthful",2],["round",1],["warm",1]],"beauty":[["youthful",3],["emotive",3],["organic",1],["warm",1]],"behavior":[["emotive",1]],"belly":[["round",3],["organic",2],["tangible",2],["warm",2],["youthful",1]],"bodies":[["organic",2],["tangible",2],["warm",1]],"bored":[["emotive",1]],"boreddddd":[["emotive",2]],"bosom":[["warm",2],["organic",1],["round",1],["tangible",1]],"bottle":[["tangible",1]],"bough":[["organic",2],["tangible",2],["round",1]],"breast":[["round",2],["warm",2],["tangible",1]],"broad":[["round",2],["outlandish",1],["tangible",1],["warm",1]],"camera":[["round",2],["tangible",1]],"captain":[["tangible",1]],"careless":[["emotive",2],["cold",1],["youthful",1]],"character":[["round",1]],"charming":[["youthful",1],["emotive",1]],"chestnut":[["organic",2],["tangible",2]],"chuckle":[["emotive",2]],"close":[["round",2],["organic",1],["emotive",1],["warm",1]],"clothes":[["warm",3],["organic",2],["tangible",2]],"coats":[["warm",3],["round",2],["tangible",2],["organic",1]],"color":[["warm",3],["cold",2],["organic",1],["youthful",1]],"comic":[["emotive",2],["youthful",1],["warm",1]],"complete":[["round",3],["tangible",1],["academic",1]],"conceit":[["emotive",1]],"concerns":[["emotive",3],["warm",2]],"confused":[["emotive",3]],"couch":[["tangible",4],["round",1],["warm",1]],"cuff":[["tangible",2],["sharp",1],["youthful",1]],"dad":[["emotive",1]],"daily":[["emotive",1]],"daughter":[["organic",2],["tangible",2],["youthful",1]],"degrading":[["emotive",1]],"desire":[["warm",2],["emotive",1],["organic",1],["outlandish",1],["youthful",1]],"desires":[["emotive",3],["youthful",2],["sharp",1],["warm",1]],"dessert":[["tangible",3]],"disappointment":[["emotive",1]],"dock":[["tangible",3],["cold",1],["sharp",1]],"doorways":[["tangible",3],["warm",1],["sharp",1]],"dread":[["emotive",1]],"drinking":[["tangible",2],["organic",1],["sharp",1]],"ease":[["round",2],["warm",2],["emotive",1]],"enchanted":[["emotive",2],["warm",1],["youthful",1]],"everyone":[["emotive",1],["warm",1],["round",1]],"excitement":[["emotive",3],["youthful",2],["sharp",1],["warm",1]],"faithful":[["emotive",2]],"fame":[["emotive",2],["youthful",1]],"father":[["warm",3],["emotive",2],["organic",1],["tangible",1]],"figure":[["tangible",1]],"finger":[["tangible",3],["organic",2],["round",1]],"fire":[["warm",4],["organic",3],["emotive",1]],"fit":[["tangible",2],["sharp",1]],"flavorful":[["emotive",2],["tangible",1],["youthful",1]],"flute-player":[["organic",1],["tangible",1]],"flutter":[["organic",1],["tangible",1]],"foil":[["tangible",2],["organic",1]],"fond":[["emotive",2],["round",2],["warm",2]],"foolish":[["emotive",3],["youthful",3]],"forgivable":[["emotive",3],["organic",1],["youthful",1],["warm",1]],"foulness":[["emotive",1],["round",1],["warm",1]],"frail words":[["emotive",1]],"front":[["emotive",1]],"full":[["round",2],["emotive",1],["organic",1],["warm",1]],"functionless":[["emotive",1],["youthful",1]],"funny":[["emotive",2],["warm",1],["youthful",1]],"furniture":[["tangible",2]],"gas":[["organic",1],["tangible",1]],"gasoline":[["organic",2],["tangible",1]],"girlish":[["emotive",1],["youthful",1]],"glass":[["organic",2],["tangible",2]],"glow":[["warm",5],["organic",4],["round",2],["emotive",1],["youthful",1],["tangible",1]],"gowns":[["tangible",2],["organic",1]],"ground":[["tangible",1]],"gunpowder":[["tangible",3],["cold",1],["sharp",1]],"harmonious":[["round",1],["warm",1]],"head":[["organic",4],["tangible",4],["round",2]],"hearts":[["warm",4],["organic",3],["round",3],["emotive",2],["tangible",2],["youthful",1]],"heat":[["organic",1],["warm",1]],"heaven":[["warm",2],["organic",1],["emotive",1],["outlandish",1]],"heights":[["tangible",1]],"hoes":[["tangible",2],["organic",1]],"honest":[["warm",2],["emotive",1]],"honey":[["organic",2],["warm",2],["tangible",1]],"horse":[["organic",1],["tangible",1]],"hot":[["warm",7],["organic",3],["round",2],["sharp",1],["tangible",1]],"hours":[["round",2],["outlandish",1]],"house":[["round",4],["tangible",4],["warm",4]],"humble":[["emotive",1]],"hunger":[["tangible",2],["sharp",1]],"husband":[["emotive",2],["warm",1]],"imagery":[["emotive",2],["academic",1],["youthful",1]],"imagination":[["emotive",1],["youthful",1]],"influences":[["emotive",2],["outlandish",1],["youthful",1]],"inherent":[["organic",2],["tangible",1]],"insect":[["organic",3],["tangible",2],["sharp",1]],"instruments":[["tangible",1]],"interest":[["emotive",1]],"jealous":[["emotive",2]],"joint":[["organic",5],["tangible",5],["youthful",1],["outlandish",1]],"jolly":[["emotive",1],["youthful",1]],"kiln":[["warm",2],["round",1],["tangible",1]],"knee":[["tangible",2],["organic",1]],"lamp":[["round",2],["warm",1],["tangible",1]],"language":[["emotive",1]],"leaves":[["organic",2],["tangible",1]],"lift":[["warm",2]],"light":[["warm",6],["organic",3],["tangible",2],["emotive",1],["youthful",1],["sharp",1],["round",1]],"lights":[["warm",2],["sharp",1],["tangible",1],["round",1]],"lion":[["organic",1],["tangible",1]],"liquor":[["warm",2],["organic",1],["sharp",1],["tangible",1]],"locksmiths":[["tangible",3],["sharp",1],["academic",1],["cold",1]],"lonely":[["emotive",1]],"long":[["tangible",3],["outlandish",1],["round",1],["sharp",1]],"loop":[["round",2]],"lovely":[["emotive",1],["round",1],["warm",1]],"lyric":[["round",1]],"mad":[["emotive",2],["youthful",1],["sharp",1]],"manner":[["warm",2],["emotive",1]],"mean":[["emotive",1],["youthful",1]],"melancholies":[["emotive",2],["warm",1]],"men singers":[["organic",1],["tangible",1]],"merry":[["emotive",2],["warm",1],["youthful",1]],"message":[["round",1]],"middle":[["warm",1]],"morning":[["warm",3],["cold",2],["organic",2],["tangible",1],["sharp",1]],"motion":[["round",2],["tangible",1]],"music":[["warm",4],["emotive",3],["organic",2],["tangible",1],["round",1],["youthful",1]],"mutual":[["round",1]],"near":[["emotive",2],["youthful",1]],"neat":[["sharp",1],["tangible",1]],"necessity":[["organic",1],["tangible",1]],"nightingale":[["warm",3],["organic",1],["outlandish",1],["academic",1]],"nod":[["emotive",1],["round",1],["warm",1]],"normal":[["organic",2],["tangible",1]],"notions":[["warm",1]],"objects":[["tangible",3],["cold",1]],"october":[["warm",2],["emotive",1],["round",1],["cold",1],["organic",1]],"ok":[["emotive",2],["youthful",2]],"okay":[["round",1],["warm",1]],"ones":[["round",2],["outlandish",1]],"open":[["round",2],["warm",1],["youthful",1],["emotive",1]],"ordinary":[["emotive",1]],"pace":[["tangible",2],["academic",1],["sharp",1]],"pan":[["round",4],["tangible",4],["warm",3]],"papa":[["round",2],["warm",2],["cold",1],["emotive",1],["tangible",1],["youthful",1]],"parent":[["warm",2],["emotive",1],["organic",1],["tangible",1]],"passion":[["emotive",2]],"pen":[["tangible",4],["sharp",3],["round",1],["academic",1]],"people":[["organic",4],["tangible",4],["academic",1],["emotive",1],["warm",1]],"performances":[["emotive",1],["youthful",1]],"period":[["organic",1],["tangible",1]],"personal":[["emotive",2],["warm",1]],"personality":[["emotive",3],["organic",1],["youthful",1]],"pet":[["warm",3],["tangible",2],["organic",1],["emotive",1]],"physical":[["tangible",1]],"piece":[["tangible",3],["sharp",3],["round",1],["organic",1]],"pieces":[["tangible",2],["organic",1],["sharp",1]],"plants":[["organic",4],["tangible",3],["warm",1]],"platform":[["tangible",2]],"plays":[["emotive",1]],"plow":[["sharp",2],["tangible",2]],"pockets":[["round",1],["tangible",1],["warm",1]],"pole":[["tangible",2],["organic",1]],"posts":[["organic",1],["tangible",1]],"praise":[["warm",1]],"pride":[["emotive",3],["youthful",1],["organic",1]],"problems":[["emotive",1]],"proficient":[["tangible",1]],"public":[["round",2],["academic",1]],"real":[["tangible",2],["organic",1],["sharp",1]],"red":[["warm",6],["organic",3],["round",1],["emotive",1],["youthful",1]],"return":[["round",2],["tangible",1]],"rich":[["emotive",1],["round",1],["warm",1]],"rippling":[["round",2],["organic",1]],"roads":[["tangible",3],["sharp",1],["organic",1],["round",1]],"rock":[["organic",3],["tangible",3],["round",1],["sharp",1]],"romance":[["emotive",1]],"room":[["tangible",4],["round",1]],"rooms":[["tangible",2]],"salon":[["round",2],["emotive",1],["warm",1]],"salutation":[["emotive",1]],"sand":[["organic",3],["tangible",2],["warm",1]],"sea":[["organic",2],["tangible",2],["round",1]],"sentimental":[["emotive",2],["warm",1],["youthful",1]],"set":[["tangible",1]],"shaft":[["round",1],["tangible",1],["warm",1]],"shame":[["emotive",2],["cold",1],["youthful",1]],"share":[["warm",2],["emotive",1]],"shelf":[["tangible",2]],"show":[["round",3],["organic",1],["tangible",1]],"side":[["tangible",2]],"simmering":[["warm",2],["organic",1]],"slang":[["youthful",1],["emotive",1]],"something":[["round",1]],"songs":[["emotive",1],["round",1],["warm",1]],"sorrow":[["emotive",2]],"soul":[["emotive",2],["organic",1],["youthful",1]],"speakers":[["tangible",3],["sharp",2],["round",1]],"spine":[["tangible",2],["sharp",1],["organic",1]],"stamp":[["round",2],["tangible",1]],"step":[["tangible",2],["organic",1],["sharp",1]],"steps":[["tangible",3],["sharp",2]],"stitch":[["tangible",1],["sharp",1]],"stocking":[["tangible",2]],"store":[["tangible",2]],"straight":[["sharp",2],["tangible",2]],"strong":[["emotive",1],["youthful",1]],"sugar":[["tangible",1]],"suitcase":[["tangible",2],["round",1]],"summer":[["organic",4],["warm",4],["emotive",1]],"sun":[["warm",4],["organic",3],["round",3],["tangible",2],["sharp",1]],"sunlight":[["organic",3],["warm",3],["youthful",1],["tangible",1]],"sunset":[["warm",2],["organic",1]],"supermarket":[["tangible",3],["cold",1],["organic",1]],"support":[["emotive",1]],"sure":[["emotive",1]],"swiftness":[["round",2],["organic",1]],"tall":[["organic",1],["tangible",1]],"tangible":[["tangible",3]],"tea":[["warm",2],["organic",1],["sharp",1],["tangible",1]],"teaspoon":[["tangible",2]],"temper":[["emotive",1]],"temperate":[["warm",2],["organic",1]],"temples":[["tangible",2]],"the pilot":[["tangible",1]],"the sun":[["warm",2],["outlandish",1],["round",1],["tangible",1]],"thing":[["tangible",3],["sharp",1],["academic",1]],"threads":[["organic",1],["tangible",1]],"tips":[["tangible",2]],"together":[["round",1],["tangible",1],["warm",1]],"topmost":[["tangible",1]],"touch":[["warm",2],["emotive",1],["organic",1],["tangible",1]],"trace":[["organic",2],["tangible",2]],"traces":[["tangible",1]],"trick":[["emotive",3],["sharp",1],["youthful",1],["cold",1]],"trip":[["tangible",1]],"trucks":[["sharp",1],["tangible",1]],"true loves":[["emotive",2],["warm",1],["youthful",1]],"tucked in":[["warm",2],["round",1],["youthful",1],["tangible",1]],"turnpikes":[["tangible",1]],"typewriters":[["tangible",3],["sharp",2],["academic",1],["outlandish",1]],"uncertain":[["emotive",1]],"unfair":[["emotive",2],["academic",1],["youthful",1]],"unity":[["warm",2],["academic",1],["emotive",1],["round",1]],"unusually good":[["emotive",1],["round",1],["warm",1]],"vehicle":[["tangible",1],["sharp",1]],"vibe":[["emotive",2],["youthful",2]],"village":[["warm",3],["tangible",2],["round",1]],"vineyards":[["organic",1],["warm",1]],"wanting":[["emotive",1]],"whiskers":[["organic",3],["tangible",2],["round",1]],"whispers":[["round",2],["warm",2],["emotive",1]],"wives":[["emotive",1]],"woman":[["organic",6],["tangible",4],["warm",1]],"wood":[["organic",3],["tangible",2]],"workmanship":[["round",1],["warm",1],["academic",1]],"workmen":[["tangible",3],["sharp",1],["organic",1]],"worlds":[["round",5],["organic",3],["outlandish",2],["warm",2],["tangible",2]],"writers":[["tangible",1]],"yellow":[["warm",2],["organic",1]],"you":[["emotive",1]],"your knees":[["organic",2],["tangible",1]]}};
+// vocabulary from the original generator (assignment #1)
+const HAND = {
+  material: ["felt", "knit", "tulle", "conductive thread", "soft silicone", "foam", "velvet", "gel", "mesh", "industrial felt", "cloud fiber"],
+  structure: ["stitched with running thread", "sealed with a slow zipper", "laced with ribbon logic", "held by snaps and patience", "taped with care (temporary)", "woven in loops that remember"],
+  power: ["moonlight", "usb power", "a warm battery", "static", "a dim wall outlet", "no power at all", "a shared charge"],
+  interface: ["a keyboard that blushes when touched", "a screen that refuses urgency", "buttons that only work if you're gentle", "a dial that drifts like weather", "a touchpad made of cloth and friction", "a cursor that waits for your breath"],
+  location: ["under a desk lamp at midnight", "in a room where time is slower", "inside a tote bag", "by the window with quiet air", "in the studio after critique", "near a plant that survives anyway"],
+  inhabitant: ["people who log off early", "hands learning softness", "a shy machine spirit", "tired students and their prototypes", "a small archive of care", "memories that don't want to be optimized"],
+  promise: ["it will not rush you", "it will misbehave politely", "it will keep your secrets imperfectly", "it will take breaks with you", "it will glow only when needed", "it will never ask for your attention twice"]
+};
+
+// the seven-line cascade, per vocabulary
+const TEMPLATES = {
+  hand: [
+    ["A computer of ", "material", ""],
+    ["", "structure", ""],
+    ["powered by ", "power", ""],
+    ["with ", "interface", ""],
+    ["resting ", "location", ""],
+    ["inhabited by ", "inhabitant", ""],
+    ["and ", "promise", "."]
+  ],
+  corpus: [
+    ["a computer of ", "material", ""],
+    ["bound by ", "structure", ""],
+    ["powered by ", "power", ""],
+    ["with ", "interface", ""],
+    ["resting among ", "location", ""],
+    ["inhabited by ", "inhabitant", ""],
+    ["and it offers ", "promise", "."]
+  ]
+};
+
+const FORBIDDEN = new Set(["cold", "sharp", "academic"]);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const tagsOf = w => (DATA.tags[w] || []);
+const hasForbidden = w => tagsOf(w).some(([t]) => FORBIDDEN.has(t));
+
+const state = { src: "corpus", tags: false, cold: false };
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// corpus slot: returns the chosen word plus any words the rejection rule refused on the way
+function corpusSlot(slot) {
+  if (state.cold) {
+    // the first version: 20 nearest neighbors, interface leans a little sharp, nothing refused
+    const pool = DATA.pools[slot === "interface" ? "interface" : slot].slice(0, 20);
+    return { word: pick(pool), refused: [] };
+  }
+  // the reworked version: 40 nearest neighbors, up to 20 tries to find a soft word
+  const pool = DATA.pools[slot === "interface" ? "interface_soft" : slot];
+  const refused = [];
+  let word;
+  for (let i = 0; i < 20; i++) {
+    word = pick(pool);
+    if (!hasForbidden(word)) return { word, refused };
+    if (!refused.includes(word)) refused.push(word);
+  }
+  return { word, refused };
+}
+
+function buildStanza() {
+  return TEMPLATES[state.src].map(([pre, slot, post]) => {
+    const r = state.src === "hand" ? { word: pick(HAND[slot]), refused: [] } : corpusSlot(slot);
+    return { pre, post, ...r, corpus: state.src === "corpus" };
+  });
+}
+
+function tagText(word) {
+  const t = tagsOf(word).slice(0, 2).map(([n]) => n);
+  return t.length ? " (" + t.join(", ") + ")" : "";
+}
+
+function lineEl(i) {
+  const el = document.createElement("span");
+  el.className = "line";
+  el.style.setProperty("--i", i);
+  return el;
+}
+
+function fillLine(el, l) {
+  el.textContent = "";
+  el.append(l.pre);
+  const w = document.createElement("span");
+  w.className = "w";
+  w.textContent = l.word;
+  el.append(w);
+  if (l.corpus && state.tags) {
+    const t = document.createElement("span");
+    t.className = "tag";
+    t.textContent = tagText(l.word);
+    el.append(t);
+  }
+  el.append(l.post);
+}
+
+const stage = document.getElementById("stage");
+const history = [];
+let building = false;
+
+function render() {
+  stage.textContent = "";
+  history.forEach((s, idx) => {
+    const st = document.createElement("span");
+    st.className = "stanza" + (idx < history.length - 1 ? " old" : "");
+    s.forEach((l, i) => { const el = lineEl(i); fillLine(el, l); st.append(el); });
+    stage.append(st);
+  });
+}
+
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+async function another() {
+  if (building) return;
+  building = true;
+  const s = buildStanza();
+  history.push(s);
+  if (history.length > 4) history.shift();
+  render();
+  if (!reduced) {
+    const st = stage.lastElementChild;
+    const lines = [...st.children];
+    lines.forEach(el => el.classList.add("pending"));
+    for (let i = 0; i < lines.length; i++) {
+      const el = lines[i], l = s[i];
+      el.classList.remove("pending");
+      // show each refusal before the soft word lands
+      for (const bad of l.refused) {
+        el.textContent = "";
+        el.append(l.pre);
+        const b = document.createElement("span");
+        b.className = "struck";
+        b.textContent = bad;
+        el.append(b);
+        if (state.tags) { const t = document.createElement("span"); t.className = "tag"; t.textContent = tagText(bad); el.append(t); }
+        await wait(420);
+      }
+      fillLine(el, l);
+      await wait(260);
+    }
+  }
+  building = false;
+}
+
+function setHint() {
+  const h = document.getElementById("hint");
+  if (state.src === "hand") h.textContent = "Click the poem or press space to build another. My words ignore the corpus, so tagging and refusal are off.";
+  else if (state.cold) h.textContent = "The rejection rule is off. Cold, sharp, and academic words can get in.";
+  else h.textContent = "Click the poem or press space to build another.";
+}
+
+function sync() {
+  document.getElementById("src-hand").setAttribute("aria-pressed", state.src === "hand");
+  document.getElementById("src-corpus").setAttribute("aria-pressed", state.src === "corpus");
+  const tg = document.getElementById("t-tags"), cd = document.getElementById("t-cold");
+  tg.setAttribute("aria-pressed", state.tags);
+  cd.setAttribute("aria-pressed", state.cold);
+  tg.disabled = cd.disabled = state.src === "hand";
+  setHint();
+}
+
+document.getElementById("src-hand").onclick = () => { state.src = "hand"; sync(); another(); };
+document.getElementById("src-corpus").onclick = () => { state.src = "corpus"; sync(); another(); };
+document.getElementById("t-tags").onclick = () => { state.tags = !state.tags; sync(); render(); };
+document.getElementById("t-cold").onclick = () => { state.cold = !state.cold; sync(); another(); };
+document.getElementById("again").onclick = another;
+stage.onclick = another;
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && e.target === document.body) { e.preventDefault(); another(); }
+});
+
+// each visit starts with a finished machine already on the page
+sync();
+history.push(buildStanza());
+render();
+</script>
+</body>
+</html>
