@@ -157,15 +157,25 @@ async function another() {
   building = false;
 }
 
+// a little sample of how the reader's words look, shown after the hint
+function yoursMark() {
+  const m = document.createElement("span");
+  m.className = "mark";
+  m.textContent = "yours look like this";
+  return m;
+}
+
 function setHint() {
   const given = SLOTS.filter((s) => yourWords(s).length).length;
   const h = document.getElementById("hint");
   if (state.src === "mine")
     h.textContent = "Click the poem or press space to build another.";
-  else
-    h.textContent = given
-      ? "Each line comes from my phrases or yours. Yours are underlined."
-      : "Write into the fields below and your phrases will be braided in with mine.";
+  else if (given) {
+    h.textContent = "Each line comes from my phrases or yours. ";
+    h.append(yoursMark());
+  } else
+    h.textContent =
+      "Write into the fields below and your phrases will be braided in with mine.";
 }
 
 function sync() {

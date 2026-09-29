@@ -18,7 +18,7 @@ A computer of moss
 
 **my words** builds from seven lists of phrases I wrote from my own design practice: "laced with ribbon logic", "a screen that refuses urgency", "it will never ask for your attention twice".
 
-**our words** braids the reader's phrases in with mine. The reader writes into seven fields, and each field finishes the words above it ("a computer of **_", "powered by _**", "and \_\_\_"). For each line the generator tosses a coin between my phrases and the reader's; a part they leave empty comes from mine. A reader who writes a single phrase has the same chance of appearing as my whole list. The reader's phrases are underlined, so you can see where their words sit next to mine.
+**our words** braids the reader's phrases in with mine. The reader writes into seven fields, and each field finishes the words above it ("a computer of **_", "powered by _**", "and \_\_\_"). For each line the generator tosses a coin between my phrases and the reader's; a part they leave empty comes from mine. A reader who writes a single phrase has the same chance of appearing as my whole list. The reader's phrases are stitched in with a dashed edge (underlined in the black-and-white embed), so you can see where their words sit next to mine.
 
 Each of the seven parts has its own pastel: blush for material, peach for binding, butter for power, matcha for interface, sky for place, wisteria for inhabitant, and mint for promise. Every word sits on its part's color like a highlighter mark, and the form's labels carry the same swatches, so readers can see which color their words will get.
 

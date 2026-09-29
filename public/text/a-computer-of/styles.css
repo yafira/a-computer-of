@@ -19,31 +19,12 @@
   --on-pastel: #0a0a0a;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0a0a0a;
-    --ink: #f5f5f5;
-    --ink-soft: #9a9a9a;
-    --ink-faint: #4a4a4a;
-    --rule: #262626;
-    color-scheme: dark;
-  }
+  :root:not([data-theme="light"]) { --paper: #0a0a0a; --ink: #f5f5f5; --ink-soft: #9a9a9a; --ink-faint: #4a4a4a; --rule: #262626; color-scheme: dark; }
 }
-:root[data-theme="dark"] {
-  --paper: #0a0a0a;
-  --ink: #f5f5f5;
-  --ink-soft: #9a9a9a;
-  --ink-faint: #4a4a4a;
-  --rule: #262626;
-  color-scheme: dark;
-}
+:root[data-theme="dark"] { --paper: #0a0a0a; --ink: #f5f5f5; --ink-soft: #9a9a9a; --ink-faint: #4a4a4a; --rule: #262626; color-scheme: dark; }
 
-* {
-  box-sizing: border-box;
-}
-html,
-body {
-  min-height: 100%;
-}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
 body {
   background: var(--paper);
   color: var(--ink);
@@ -53,78 +34,24 @@ body {
   padding-block: 40px 56px;
   padding-inline: 24px;
 }
-.wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
+.wrap { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
 
-header {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 62ch;
-}
-h1 {
-  font-size: 15px;
-  font-weight: 500;
-  margin: 0;
-  letter-spacing: 0.01em;
-}
-header p {
-  margin: 0;
-  color: var(--ink-soft);
-  font-weight: 300;
-}
+header { display: flex; flex-direction: column; gap: 8px; max-width: 62ch; }
+h1 { font-size: 15px; font-weight: 500; margin: 0; letter-spacing: 0.01em; }
+header p { margin: 0; color: var(--ink-soft); font-weight: 300; }
 
 #stage {
-  appearance: none;
-  background: none;
-  border: 0;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  min-width: 0;
+  appearance: none; background: none; border: 0; color: inherit; font: inherit; text-align: left;
+  padding: 0; cursor: pointer; display: flex; flex-direction: column; gap: 36px; min-width: 0;
 }
-#stage:focus-visible {
-  outline: 1px dashed var(--ink);
-  outline-offset: 12px;
-}
+#stage:focus-visible { outline: 1px dashed var(--ink); outline-offset: 12px; }
 
-.stanza {
-  display: flex;
-  flex-direction: column;
-  font-size: clamp(15px, 1.6vw + 8px, 20px);
-  line-height: 1.75;
-}
-.stanza.old {
-  color: var(--ink-faint);
-  font-size: 15px;
-  line-height: 1.6;
-}
-.line {
-  padding-left: calc(var(--i) * var(--step));
-  text-indent: -2ch;
-  margin-left: 2ch;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.line.pending {
-  visibility: hidden;
-}
-.w {
-  font-weight: 500;
-}
-.stanza.old .w {
-  font-weight: 400;
-}
+.stanza { display: flex; flex-direction: column; font-size: clamp(15px, 1.6vw + 8px, 20px); line-height: 1.75; }
+.stanza.old { color: var(--ink-faint); font-size: 15px; line-height: 1.6; }
+.line { padding-left: calc(var(--i) * var(--step)); text-indent: -2ch; margin-left: 2ch; min-width: 0; overflow-wrap: anywhere; }
+.line.pending { visibility: hidden; }
+.w { font-weight: 500; }
+.stanza.old .w { font-weight: 400; }
 
 /* on the standalone page, each word sits on its part's pastel like a
    highlighter; the text stays dark on the pastel in both themes. the
@@ -137,113 +64,31 @@ html:not(.embed) .w {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-html:not(.embed) .stanza.old {
-  color: var(--ink);
-  opacity: 0.4;
-}
-.slot-material {
-  --slot: var(--material);
-}
-.slot-structure {
-  --slot: var(--structure);
-}
-.slot-power {
-  --slot: var(--power);
-}
-.slot-interface {
-  --slot: var(--interface);
-}
-.slot-location {
-  --slot: var(--location);
-}
-.slot-inhabitant {
-  --slot: var(--inhabitant);
-}
-.slot-promise {
-  --slot: var(--promise);
-}
+html:not(.embed) .stanza.old { color: var(--ink); opacity: 0.4; }
+.slot-material { --slot: var(--material); }
+.slot-structure { --slot: var(--structure); }
+.slot-power { --slot: var(--power); }
+.slot-interface { --slot: var(--interface); }
+.slot-location { --slot: var(--location); }
+.slot-inhabitant { --slot: var(--inhabitant); }
+.slot-promise { --slot: var(--promise); }
 
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 28px;
-  align-items: center;
-  border-top: 1px solid var(--rule);
-  padding-top: 20px;
+.controls { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; border-top: 1px solid var(--rule); padding-top: 20px; }
+.group { display: flex; gap: 0; border: 1px solid var(--ink); }
+.group button, .toggle, .again {
+  font: inherit; font-size: 13px; color: var(--ink); background: var(--paper); border: 0; padding: 6px 12px; cursor: pointer;
 }
-.group {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--ink);
-}
-.group button,
-.toggle,
-.again {
-  font: inherit;
-  font-size: 13px;
-  color: var(--ink);
-  background: var(--paper);
-  border: 0;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-.group button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--paper);
-}
-.group button + button {
-  border-left: 1px solid var(--ink);
-}
-.toggle {
-  padding: 6px 0;
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-}
-.again {
-  border: 1px solid var(--ink);
-  margin-left: auto;
-}
-.again:hover,
-.group button:hover {
-  text-decoration: underline;
-}
-button:focus-visible {
-  outline: 1px dashed var(--ink);
-  outline-offset: 3px;
-}
-.panel {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.yours {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: 1px solid var(--ink);
-  padding: 20px;
-}
-.yours-intro {
-  margin: 0;
-  color: var(--ink-soft);
-  font-weight: 300;
-  font-size: 13px;
-  max-width: 62ch;
-}
-.fields {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
-  gap: 14px 24px;
-}
-.fields label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12px;
-  color: var(--ink-soft);
-  min-width: 0;
-}
+.group button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.group button + button { border-left: 1px solid var(--ink); }
+.toggle { padding: 6px 0; display: inline-flex; gap: 8px; align-items: center; }
+.again { border: 1px solid var(--ink); margin-left: auto; }
+.again:hover, .group button:hover { text-decoration: underline; }
+button:focus-visible { outline: 1px dashed var(--ink); outline-offset: 3px; }
+.panel { display: flex; flex-direction: column; gap: 16px; }
+.yours { display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--ink); padding: 20px; }
+.yours-intro { margin: 0; color: var(--ink-soft); font-weight: 300; font-size: 13px; max-width: 62ch; }
+.fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px 24px; }
+.fields label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-soft); min-width: 0; }
 html:not(.embed) .fields label span::before {
   content: "";
   display: inline-block;
@@ -254,105 +99,48 @@ html:not(.embed) .fields label span::before {
   border-radius: 2px;
   background: var(--slot);
 }
-label[for="f-material"] {
-  --slot: var(--material);
+label[for="f-material"] { --slot: var(--material); }
+label[for="f-structure"] { --slot: var(--structure); }
+label[for="f-power"] { --slot: var(--power); }
+label[for="f-interface"] { --slot: var(--interface); }
+label[for="f-location"] { --slot: var(--location); }
+label[for="f-inhabitant"] { --slot: var(--inhabitant); }
+label[for="f-promise"] { --slot: var(--promise); }
+.fields input { font: inherit; font-size: 14px; color: var(--ink); background: var(--paper); border: 0; border-bottom: 1px solid var(--ink-faint); padding: 4px 0; border-radius: 0; width: 100%; }
+.fields input::placeholder { color: var(--ink-faint); }
+.fields input:focus { outline: none; border-bottom-color: var(--ink); }
+.form-actions { display: flex; gap: 20px; align-items: center; }
+.form-actions .again { margin-left: 0; }
+/* the reader's words: underlined in the black-and-white embed, and on
+   the standalone page stitched in with a dashed edge drawn on the pastel */
+.embed .w.mine { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+html:not(.embed) .w.mine {
+  outline: 1.5px dashed var(--on-pastel);
+  outline-offset: -3px;
+  padding: 0.05em 0.4em;
 }
-label[for="f-structure"] {
-  --slot: var(--structure);
+.mark {
+  padding: 0 0.3em;
+  border-radius: 2px;
+  color: var(--on-pastel);
+  background: var(--promise);
+  outline: 1.5px dashed var(--on-pastel);
+  outline-offset: -3px;
 }
-label[for="f-power"] {
-  --slot: var(--power);
-}
-label[for="f-interface"] {
-  --slot: var(--interface);
-}
-label[for="f-location"] {
-  --slot: var(--location);
-}
-label[for="f-inhabitant"] {
-  --slot: var(--inhabitant);
-}
-label[for="f-promise"] {
-  --slot: var(--promise);
-}
-.fields input {
-  font: inherit;
-  font-size: 14px;
-  color: var(--ink);
-  background: var(--paper);
-  border: 0;
-  border-bottom: 1px solid var(--ink-faint);
-  padding: 4px 0;
-  border-radius: 0;
-  width: 100%;
-}
-.fields input::placeholder {
-  color: var(--ink-faint);
-}
-.fields input:focus {
-  outline: none;
-  border-bottom-color: var(--ink);
-}
-.form-actions {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-.form-actions .again {
-  margin-left: 0;
-}
-.w.mine {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-}
-.hint {
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 13px;
-  font-weight: 300;
-}
+.embed .mark { background: none; color: inherit; outline: none; text-decoration: underline; text-underline-offset: 4px; }
+.hint { margin: 0;  color: var(--ink-soft); font-size: 13px; font-weight: 300; }
 
-footer {
-  color: var(--ink-soft);
-  font-size: 12px;
-  font-weight: 300;
-  max-width: 62ch;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-footer p {
-  margin: 0;
-}
+footer { color: var(--ink-soft); font-size: 12px; font-weight: 300; max-width: 62ch; display: flex; flex-direction: column; gap: 6px; }
+footer p { margin: 0; }
 
 @media (max-width: 560px) {
-  :root {
-    --step: 2ch;
-  }
-  body {
-    padding-inline: 16px;
-    padding-block: 28px 40px;
-  }
-  .again {
-    margin-left: 0;
-  }
+  :root { --step: 2ch; }
+  body { padding-inline: 16px; padding-block: 28px 40px; }
+  .again { margin-left: 0; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .line.pending {
-    visibility: visible;
-  }
-}
+@media (prefers-reduced-motion: reduce) { .line.pending { visibility: visible; } }
 
 /* embedded on electrocute.io/electronic-text: the host page supplies the title and notes */
-.embed body {
-  padding-block: 8px 24px;
-  padding-inline: 4px;
-}
-.embed header,
-.embed footer {
-  display: none;
-}
-.embed .wrap {
-  gap: 32px;
-}
+.embed body { padding-block: 8px 24px; padding-inline: 4px; }
+.embed header, .embed footer { display: none; }
+.embed .wrap { gap: 32px; }
