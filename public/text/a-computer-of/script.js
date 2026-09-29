@@ -100,14 +100,20 @@ function fill(slot) {
 }
 
 function buildStanza() {
-  return CASCADE.map(([pre, slot, post]) => ({ pre, post, ...fill(slot) }));
+  return CASCADE.map(([pre, slot, post]) => ({
+    pre,
+    post,
+    slot,
+    ...fill(slot),
+  }));
 }
 
 function fillLine(el, l) {
   el.textContent = "";
   el.append(l.pre);
   const w = document.createElement("span");
-  w.className = "w" + (l.mine ? " mine" : "");
+  // each part of the machine has its own pastel, set in style.css
+  w.className = "w slot-" + l.slot + (l.mine ? " mine" : "");
   w.textContent = l.word;
   el.append(w, l.post);
 }
@@ -229,3 +235,22 @@ load();
 sync();
 history.push(buildStanza());
 render();
+
+// when embedded with ?embed, hide the header and footer and tell the host page how tall to be
+if (new URLSearchParams(location.search).has("embed")) {
+  document.documentElement.classList.add("embed");
+  const report = () =>
+    parent.postMessage(
+      {
+        type: "acomputerof:height",
+        height: document.documentElement.scrollHeight,
+      },
+      "*",
+    );
+  new ResizeObserver(report).observe(document.body);
+  // the host may start listening after this runs, so it can ask again
+  window.addEventListener("message", (e) => {
+    if (e.data?.type === "acomputerof:measure") report();
+  });
+  report();
+}

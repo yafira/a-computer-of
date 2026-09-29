@@ -7,6 +7,16 @@
   --rule: #e2e2e2;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --step: 5ch;
+
+  /* one pastel per part of the machine */
+  --material: #f9d5e1;
+  --structure: #fcddc7;
+  --power: #faedb4;
+  --interface: #d5ebcb;
+  --location: #cfe5f6;
+  --inhabitant: #ddd3f4;
+  --promise: #cdeee6;
+  --on-pastel: #0a0a0a;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -116,6 +126,43 @@ header p {
   font-weight: 400;
 }
 
+/* on the standalone page, each word sits on its part's pastel like a
+   highlighter; the text stays dark on the pastel in both themes. the
+   embed on electrocute.io/electronic-text stays black and white. */
+html:not(.embed) .w {
+  color: var(--on-pastel);
+  background: var(--slot);
+  padding: 0 0.25em;
+  border-radius: 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+html:not(.embed) .stanza.old {
+  color: var(--ink);
+  opacity: 0.4;
+}
+.slot-material {
+  --slot: var(--material);
+}
+.slot-structure {
+  --slot: var(--structure);
+}
+.slot-power {
+  --slot: var(--power);
+}
+.slot-interface {
+  --slot: var(--interface);
+}
+.slot-location {
+  --slot: var(--location);
+}
+.slot-inhabitant {
+  --slot: var(--inhabitant);
+}
+.slot-promise {
+  --slot: var(--promise);
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -197,6 +244,37 @@ button:focus-visible {
   color: var(--ink-soft);
   min-width: 0;
 }
+html:not(.embed) .fields label span::before {
+  content: "";
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.5em;
+  vertical-align: -0.05em;
+  border-radius: 2px;
+  background: var(--slot);
+}
+label[for="f-material"] {
+  --slot: var(--material);
+}
+label[for="f-structure"] {
+  --slot: var(--structure);
+}
+label[for="f-power"] {
+  --slot: var(--power);
+}
+label[for="f-interface"] {
+  --slot: var(--interface);
+}
+label[for="f-location"] {
+  --slot: var(--location);
+}
+label[for="f-inhabitant"] {
+  --slot: var(--inhabitant);
+}
+label[for="f-promise"] {
+  --slot: var(--promise);
+}
 .fields input {
   font: inherit;
   font-size: 14px;
@@ -264,4 +342,17 @@ footer p {
   .line.pending {
     visibility: visible;
   }
+}
+
+/* embedded on electrocute.io/electronic-text: the host page supplies the title and notes */
+.embed body {
+  padding-block: 8px 24px;
+  padding-inline: 4px;
+}
+.embed header,
+.embed footer {
+  display: none;
+}
+.embed .wrap {
+  gap: 32px;
 }

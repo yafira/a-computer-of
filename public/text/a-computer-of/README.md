@@ -20,6 +20,8 @@ A computer of moss
 
 **our words** braids the reader's phrases in with mine. The reader writes into seven fields, and each field finishes the words above it ("a computer of **_", "powered by _**", "and \_\_\_"). For each line the generator tosses a coin between my phrases and the reader's; a part they leave empty comes from mine. A reader who writes a single phrase has the same chance of appearing as my whole list. The reader's phrases are underlined, so you can see where their words sit next to mine.
 
+Each of the seven parts has its own pastel: blush for material, peach for binding, butter for power, matcha for interface, sky for place, wisteria for inhabitant, and mint for promise. Every word sits on its part's color like a highlighter mark, and the form's labels carry the same swatches, so readers can see which color their words will get.
+
 ## Why the web
 
 The poem started as a Python notebook that printed seven stanzas and stopped. In the browser it keeps going, and it can take in the reader's words. The machine stops being something I describe to you and becomes something we build together, one line mine, the next yours.
@@ -66,7 +68,7 @@ The stepped indentation is one CSS rule. Each line gets its position in the casc
 ## Files
 
 - `index.html` holds the markup: the poem, the mode buttons, and the reader's form.
-- `style.css` holds the black-and-white styling, the cascade, and the light and dark themes.
+- `style.css` holds the styling, the pastel for each part of the machine, the cascade, and the light and dark themes.
 - `script.js` holds the vocabulary, the generator, the line-by-line reveal, and the saving of the reader's phrases.
 
 ## Running it
@@ -77,7 +79,16 @@ The only external resource is IBM Plex Mono from Google Fonts. Without a connect
 
 ## Origin
 
-The generator began as Assignment #1 in Reading and Writing Electronic Text at NYU ITP, taught by Allison Parrish. The notebook is `poetry_generator.ipynb` in [electronic-txt](https://github.com/yafira/electronic-txt). The vocabulary, the seven-line structure, and the stepped indentation all come from that notebook. The web version adds the reader.
+The generator began as Assignment #1 in Reading and Writing Electronic Text at NYU ITP, taught by Allison Parrish. Its structure follows Alison Knowles and James Tenney's _A House of Dust_ (1967), a computer poem that builds a house one line at a time from lists of materials, places, light sources, and inhabitants. The notebook is `poetry_generator.ipynb` in [electronic-txt](https://github.com/yafira/electronic-txt).
+
+What's different here:
+
+- the houses become soft computers, with a vocabulary drawn from my own design practice
+- the reader can write into the machine, and their phrases are braided in with mine
+- each of the seven parts has its own pastel, so the structure is visible at a glance
+- it keeps building in the browser, one stanza at a time, instead of printing a fixed run
+
+A later rework of the notebook picked words from the class's hand-tagged semantic corpus and refused anything tagged cold, sharp, or academic. That version became Ribbon Logic, the poem's physical form.
 
 ## Privacy
 
